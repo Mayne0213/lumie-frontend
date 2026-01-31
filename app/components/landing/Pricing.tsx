@@ -73,36 +73,36 @@ const plans = [
 
 export default function Pricing() {
   return (
-    <section className="py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-6">
+    <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Header */}
-        <div className="text-center mb-16">
-          <p className="text-sm font-medium tracking-widest text-neutral-400 uppercase mb-4">
+        <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+          <p className="text-xs sm:text-sm font-medium tracking-widest text-neutral-400 uppercase mb-3 sm:mb-4">
             요금제
           </p>
-          <h2 className="text-4xl lg:text-5xl font-bold text-neutral-900 mb-6 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-neutral-900 mb-4 sm:mb-6 tracking-tight">
             팀에 맞는 플랜을 선택하세요
           </h2>
-          <p className="text-lg text-neutral-500 max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base lg:text-lg text-neutral-500 max-w-2xl mx-auto px-4">
             모든 플랜에서 14일 무료 체험을 제공합니다. 언제든지 취소 가능합니다.
           </p>
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
           {plans.map((plan) => (
             <div
               key={plan.name}
-              className={`relative rounded-2xl p-6 transition-all duration-300 ${
+              className={`relative rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 transition-all duration-300 ${
                 plan.highlighted
-                  ? 'bg-neutral-900 text-white shadow-2xl shadow-neutral-900/20 lg:scale-105'
+                  ? 'bg-neutral-900 text-white shadow-2xl shadow-neutral-900/20 sm:scale-[1.02] lg:scale-105 order-first sm:order-none'
                   : 'bg-neutral-50 hover:shadow-lg'
               }`}
             >
               {/* Badge */}
               {plan.badge && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="px-4 py-1 bg-gradient-to-r from-violet-600 to-fuchsia-500 text-white text-xs font-semibold rounded-full">
+                  <span className="px-3 sm:px-4 py-1 bg-gradient-to-r from-violet-600 to-fuchsia-500 text-white text-[10px] sm:text-xs font-semibold rounded-full whitespace-nowrap">
                     {plan.badge}
                   </span>
                 </div>
@@ -110,7 +110,7 @@ export default function Pricing() {
 
               {/* Plan name */}
               <h3
-                className={`text-xl font-bold mb-2 ${
+                className={`text-lg sm:text-xl font-bold mb-2 ${
                   plan.highlighted ? 'text-white' : 'text-neutral-900'
                 }`}
               >
@@ -118,9 +118,9 @@ export default function Pricing() {
               </h3>
 
               {/* Price */}
-              <div className="mb-4">
+              <div className="mb-3 sm:mb-4">
                 <span
-                  className={`text-4xl font-bold ${
+                  className={`text-2xl sm:text-3xl lg:text-4xl font-bold ${
                     plan.highlighted ? 'text-white' : 'text-neutral-900'
                   }`}
                 >
@@ -128,7 +128,7 @@ export default function Pricing() {
                 </span>
                 {plan.period && (
                   <span
-                    className={`text-sm ${
+                    className={`text-xs sm:text-sm ${
                       plan.highlighted ? 'text-neutral-400' : 'text-neutral-500'
                     }`}
                   >
@@ -139,7 +139,7 @@ export default function Pricing() {
 
               {/* Description */}
               <p
-                className={`text-sm mb-8 ${
+                className={`text-xs sm:text-sm mb-5 sm:mb-6 lg:mb-8 ${
                   plan.highlighted ? 'text-neutral-400' : 'text-neutral-500'
                 }`}
               >
@@ -148,7 +148,7 @@ export default function Pricing() {
 
               {/* CTA Button */}
               <button
-                className={`w-full py-3.5 text-sm font-semibold rounded-xl transition-all duration-300 mb-8 ${
+                className={`w-full py-3 sm:py-3.5 text-xs sm:text-sm font-semibold rounded-lg sm:rounded-xl transition-all duration-300 mb-5 sm:mb-6 lg:mb-8 ${
                   plan.buttonStyle === 'filled'
                     ? 'bg-white text-neutral-900 hover:bg-neutral-100'
                     : plan.highlighted
@@ -160,16 +160,16 @@ export default function Pricing() {
               </button>
 
               {/* Features */}
-              <ul className="space-y-3">
+              <ul className="space-y-2 sm:space-y-3">
                 {plan.features.map((feature, index) => (
-                  <li key={index} className="flex items-start gap-3">
+                  <li key={index} className="flex items-start gap-2 sm:gap-3">
                     <Check
-                      className={`w-5 h-5 flex-shrink-0 mt-0.5 ${
+                      className={`w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 mt-0.5 ${
                         plan.highlighted ? 'text-violet-400' : 'text-violet-600'
                       }`}
                     />
                     <span
-                      className={`text-sm ${
+                      className={`text-xs sm:text-sm ${
                         plan.highlighted ? 'text-neutral-300' : 'text-neutral-600'
                       }`}
                     >
@@ -183,7 +183,7 @@ export default function Pricing() {
         </div>
 
         {/* Bottom note */}
-        <p className="text-center text-sm text-neutral-400 mt-12">
+        <p className="text-center text-xs sm:text-sm text-neutral-400 mt-8 sm:mt-10 lg:mt-12 px-4">
           대규모 조직 또는 특별한 요구사항이 있으신가요?{' '}
           <a href="#" className="text-neutral-900 font-medium hover:underline">
             맞춤 견적 문의하기

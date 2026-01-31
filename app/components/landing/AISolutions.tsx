@@ -155,25 +155,25 @@ export default function AISolutions() {
   const content = teamContent[activeTeam as keyof typeof teamContent];
 
   return (
-    <section className="py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-6">
+    <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-4xl lg:text-5xl font-bold text-neutral-900 mb-4">
+        <div className="text-center mb-8 sm:mb-10 lg:mb-12">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-neutral-900 mb-3 sm:mb-4">
             AI solutions for <span className="text-neutral-400 font-normal">every team</span>
           </h2>
-          <p className="text-lg text-neutral-500">
+          <p className="text-sm sm:text-base lg:text-lg text-neutral-500">
             Your key workflows, powered by Lumie Agents.
           </p>
         </div>
 
         {/* Team pills */}
-        <div className="flex flex-wrap justify-center gap-2 mb-12">
+        <div className="flex flex-wrap justify-center gap-1 sm:gap-2 mb-8 sm:mb-10 lg:mb-12 px-2">
           {teams.map((team) => (
             <button
               key={team.id}
               onClick={() => setActiveTeam(team.id)}
-              className={`relative px-5 py-2.5 text-sm font-medium transition-all duration-300 ${
+              className={`relative px-3 sm:px-4 lg:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-medium transition-all duration-300 ${
                 activeTeam === team.id
                   ? 'text-black'
                   : 'text-neutral-400 hover:text-neutral-600'
@@ -188,38 +188,38 @@ export default function AISolutions() {
         </div>
 
         {/* Content Card */}
-        <div className="bg-neutral-50 rounded-3xl p-8 lg:p-12">
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
+        <div className="bg-neutral-50 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 lg:p-12">
+          <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 md:gap-10 lg:gap-12 items-start">
             {/* Left side */}
-            <div>
-              <h3 className="text-3xl lg:text-4xl font-bold text-neutral-900 mb-1">
+            <div className="text-center lg:text-left">
+              <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-neutral-900 mb-1">
                 {content.title}
               </h3>
-              <h3 className="text-3xl lg:text-4xl font-bold text-neutral-900 mb-1">
+              <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-neutral-900 mb-1">
                 {content.titleLine2}
               </h3>
-              <h3 className="text-3xl lg:text-4xl font-bold text-neutral-400 mb-6">
+              <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-neutral-400 mb-4 sm:mb-6">
                 {content.highlight}
               </h3>
-              <p className="text-neutral-600 mb-8 max-w-md">
+              <p className="text-sm sm:text-base text-neutral-600 mb-6 sm:mb-8 max-w-md mx-auto lg:mx-0">
                 {content.description}
               </p>
 
               {/* Replaces section */}
-              <div className="flex items-center gap-3 mb-6">
-                <span className="text-xs font-semibold tracking-wider text-neutral-400 uppercase">
+              <div className="flex items-center justify-center lg:justify-start gap-2 sm:gap-3 mb-4 sm:mb-6">
+                <span className="text-[10px] sm:text-xs font-semibold tracking-wider text-neutral-400 uppercase">
                   Replaces
                 </span>
-                <div className="flex items-center gap-2 text-neutral-400">
+                <div className="flex items-center gap-1.5 sm:gap-2 text-neutral-400">
                   {replaceIcons}
                 </div>
               </div>
 
               {/* Features list */}
-              <ul className="space-y-3">
+              <ul className="space-y-2 sm:space-y-3 text-left max-w-md mx-auto lg:mx-0">
                 {content.features.map((feature, index) => (
-                  <li key={index} className="flex items-center gap-3 text-neutral-700">
-                    <Check className="w-4 h-4 text-neutral-400" />
+                  <li key={index} className="flex items-center gap-2 sm:gap-3 text-sm sm:text-base text-neutral-700">
+                    <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-neutral-400 flex-shrink-0" />
                     {feature}
                   </li>
                 ))}
@@ -227,16 +227,16 @@ export default function AISolutions() {
             </div>
 
             {/* Right side - Agent cards */}
-            <div className="space-y-3">
+            <div className="space-y-2 sm:space-y-3">
               {content.agents.map((agent, index) => (
                 <div
                   key={index}
-                  className="bg-white rounded-xl px-5 py-4 flex items-center gap-4 shadow-sm"
+                  className="bg-white rounded-lg sm:rounded-xl px-3 sm:px-4 lg:px-5 py-3 sm:py-4 flex items-center gap-3 sm:gap-4 shadow-sm"
                 >
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-200 to-orange-300 flex items-center justify-center text-lg">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-amber-200 to-orange-300 flex items-center justify-center text-base sm:text-lg flex-shrink-0">
                     {['🧑‍💼', '👩‍💻', '👨‍🔧', '👩‍🎨'][index % 4]}
                   </div>
-                  <p className="text-neutral-800 font-medium">
+                  <p className="text-sm sm:text-base text-neutral-800 font-medium">
                     <span className="font-semibold">{agent.name}</span>{' '}
                     <span className="text-neutral-600 font-normal">{agent.action}</span>
                   </p>
@@ -244,8 +244,8 @@ export default function AISolutions() {
               ))}
 
               {/* CTA Button */}
-              <div className="pt-4">
-                <button className="group relative bg-black text-white px-8 py-3.5 text-sm font-semibold tracking-wide overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-black/20">
+              <div className="pt-3 sm:pt-4">
+                <button className="group relative w-full sm:w-auto bg-black text-white px-6 sm:px-8 py-3 sm:py-3.5 text-sm font-semibold tracking-wide overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-black/20">
                   <span className="relative z-10">Explore solution →</span>
                   <div className="absolute inset-0 bg-neutral-800 translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
                 </button>

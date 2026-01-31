@@ -60,10 +60,10 @@ export default function SuperAgents() {
           </div>
 
           {/* Feature Cards */}
-          <div className="px-10 sm:px-20 lg:px-32 xl:px-40 pb-8">
+          <div className="px-4 sm:px-10 md:px-20 lg:px-32 xl:px-40 pb-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5 max-w-[1030px] mx-auto">
               {/* Card 1: @Brain Agent */}
-              <div className="relative bg-transparent rounded-xl p-5 lg:p-6 border border-neutral-800 overflow-hidden min-h-[420px] max-w-[330px]">
+              <div className="relative bg-transparent rounded-xl p-4 sm:p-5 lg:p-6 border border-neutral-800 overflow-hidden min-h-[320px] sm:min-h-[380px] lg:min-h-[420px] mx-auto md:mx-0 max-w-[330px] w-full">
                 {/* Inner edge gradient - 20% edges */}
                 <div className="absolute inset-0 pointer-events-none rounded-xl">
                   <div className="absolute top-0 left-0 right-0 h-[20%] bg-gradient-to-b from-neutral-900 to-transparent" />
@@ -99,7 +99,7 @@ export default function SuperAgents() {
               </div>
 
               {/* Card 2: Ambient Answers */}
-              <div className="relative bg-transparent rounded-xl p-5 lg:p-6 border border-neutral-800 overflow-hidden min-h-[420px] max-w-[330px]">
+              <div className="relative bg-transparent rounded-xl p-4 sm:p-5 lg:p-6 border border-neutral-800 overflow-hidden min-h-[320px] sm:min-h-[380px] lg:min-h-[420px] mx-auto md:mx-0 max-w-[330px] w-full">
                 {/* Inner edge gradient - 20% edges */}
                 <div className="absolute inset-0 pointer-events-none rounded-xl">
                   <div className="absolute top-0 left-0 right-0 h-[20%] bg-gradient-to-b from-neutral-900 to-transparent" />
@@ -136,7 +136,7 @@ export default function SuperAgents() {
               </div>
 
               {/* Card 3: Project Manager */}
-              <div className="relative bg-transparent rounded-xl p-5 lg:p-6 border border-neutral-800 overflow-hidden min-h-[420px] max-w-[330px]">
+              <div className="relative bg-transparent rounded-xl p-4 sm:p-5 lg:p-6 border border-neutral-800 overflow-hidden min-h-[320px] sm:min-h-[380px] lg:min-h-[420px] mx-auto md:mx-0 max-w-[330px] w-full">
                 {/* Inner edge gradient - 20% edges */}
                 <div className="absolute inset-0 pointer-events-none rounded-xl">
                   <div className="absolute top-0 left-0 right-0 h-[20%] bg-gradient-to-b from-neutral-900 to-transparent" />
@@ -177,7 +177,7 @@ export default function SuperAgents() {
           </div>
 
           {/* Voice Section */}
-          <div className="px-10 sm:px-20 lg:px-32 xl:px-40 pb-8">
+          <div className="px-4 sm:px-10 md:px-20 lg:px-32 xl:px-40 pb-8">
             <div className="bg-neutral-900 rounded-xl p-6 sm:p-8 lg:p-10 border border-neutral-800 max-w-[1030px] mx-auto">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-center">
                 {/* Left Content */}
@@ -248,55 +248,55 @@ export default function SuperAgents() {
           </div>
 
           {/* Bottom Features */}
-          <div className="px-10 sm:px-20 lg:px-32 xl:px-40 pb-12 sm:pb-16 lg:pb-20">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10 max-w-[1030px] mx-auto">
+          <div className="px-4 sm:px-10 md:px-20 lg:px-32 xl:px-40 pb-10 sm:pb-12 md:pb-16 lg:pb-20">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-4 md:gap-8 lg:gap-10 max-w-[1030px] mx-auto">
               {/* Your company's AI */}
               <div className="text-center">
-                <div className="flex justify-center mb-6">
+                <div className="flex justify-center mb-4 sm:mb-6">
                   <div className="relative">
-                    <div className="w-36 h-16 bg-neutral-800 rounded-xl border border-neutral-700 flex items-center justify-center">
-                      <div className="flex items-center gap-2 px-4 py-2 bg-neutral-700 rounded-lg">
-                        <Settings className="w-4 h-4 text-white/60" />
-                        <span className="text-sm text-white/80">Sound like me</span>
+                    <div className="w-32 sm:w-36 h-14 sm:h-16 bg-neutral-800 rounded-xl border border-neutral-700 flex items-center justify-center">
+                      <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-neutral-700 rounded-lg">
+                        <Settings className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/60" />
+                        <span className="text-xs sm:text-sm text-white/80">Sound like me</span>
                       </div>
                     </div>
                   </div>
                 </div>
-                <h4 className="text-white font-semibold mb-2">Your company's AI</h4>
-                <p className="text-white/40 text-sm">A superhuman brain built for you and your team.</p>
+                <h4 className="text-white font-semibold mb-1.5 sm:mb-2 text-sm sm:text-base">Your company's AI</h4>
+                <p className="text-white/40 text-xs sm:text-sm">A superhuman brain built for you and your team.</p>
               </div>
 
               {/* Connected to 50+ apps */}
-              <div className="text-center border-x border-neutral-800 px-4">
-                <div className="flex justify-center mb-6">
-                  <div className="grid grid-cols-4 gap-2">
+              <div className="text-center sm:border-x border-neutral-800 px-4 py-4 sm:py-0 border-y sm:border-y-0">
+                <div className="flex justify-center mb-4 sm:mb-6">
+                  <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
                     {['📷', '📅', '📧', '🏔️', '🎨', '🔷', '💠', '⬛'].map((emoji, i) => (
-                      <div key={i} className="w-10 h-10 bg-neutral-800 rounded-lg flex items-center justify-center text-lg">
+                      <div key={i} className="w-8 h-8 sm:w-10 sm:h-10 bg-neutral-800 rounded-lg flex items-center justify-center text-base sm:text-lg">
                         {emoji}
                       </div>
                     ))}
                   </div>
                 </div>
-                <h4 className="text-white font-semibold mb-2">Connected to 50+ apps</h4>
-                <p className="text-white/40 text-sm">Superpowers to complete 500+ human tasks.</p>
+                <h4 className="text-white font-semibold mb-1.5 sm:mb-2 text-sm sm:text-base">Connected to 50+ apps</h4>
+                <p className="text-white/40 text-xs sm:text-sm">Superpowers to complete 500+ human tasks.</p>
               </div>
 
               {/* Every AI */}
               <div className="text-center">
-                <div className="flex justify-center mb-6">
+                <div className="flex justify-center mb-4 sm:mb-6">
                   <div className="flex items-center -space-x-2">
                     {['⚡', '✨', '🔮', '🌟', '💫'].map((emoji, i) => (
                       <div
                         key={i}
-                        className={`rounded-full bg-neutral-800 border-2 border-neutral-900 flex items-center justify-center text-lg ${i === 2 ? 'w-14 h-14 z-10' : 'w-10 h-10'}`}
+                        className={`rounded-full bg-neutral-800 border-2 border-neutral-900 flex items-center justify-center text-base sm:text-lg ${i === 2 ? 'w-11 h-11 sm:w-14 sm:h-14 z-10' : 'w-8 h-8 sm:w-10 sm:h-10'}`}
                       >
                         {emoji}
                       </div>
                     ))}
                   </div>
                 </div>
-                <h4 className="text-white font-semibold mb-2">Every AI</h4>
-                <p className="text-white/40 text-sm">ChatGPT, Claude, Gemini — unlimited.</p>
+                <h4 className="text-white font-semibold mb-1.5 sm:mb-2 text-sm sm:text-base">Every AI</h4>
+                <p className="text-white/40 text-xs sm:text-sm">ChatGPT, Claude, Gemini — unlimited.</p>
               </div>
             </div>
           </div>
