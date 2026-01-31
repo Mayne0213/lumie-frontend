@@ -1,0 +1,18 @@
+{
+  "operator": false,
+  "feature": {
+    "network": {
+      "incoming": "off",
+      "outgoing": {
+        "tcp": true,
+        "udp": true
+      },
+      "dns": true
+    },
+    "fs": "local",
+    "env": false
+  },
+  "agent": {
+    "namespace": "default"
+  }
+}
