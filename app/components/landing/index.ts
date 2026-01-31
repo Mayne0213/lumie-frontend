@@ -5,8 +5,5 @@ export { default as ConvergedPlatform } from './ConvergedPlatform';
 export { default as SuperAgents } from './SuperAgents';
 export { default as AISolutions } from './AISolutions';
 export { default as ProjectDelivery } from './ProjectDelivery';
-export { default as Stats } from './Stats';
-export { default as SocialProof } from './SocialProof';
-export { default as Enterprise } from './Enterprise';
 export { default as FinalCTA } from './FinalCTA';
 export { default as Footer } from './Footer';
