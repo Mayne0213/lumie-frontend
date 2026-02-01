@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 
 const companyLogos = ['삼성', 'LG', '현대', 'SK', '네이버'];
 
@@ -21,7 +22,7 @@ export default function Hero() {
             <div className="inline-flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6 lg:mb-8">
               <span className="w-8 sm:w-10 lg:w-12 h-px bg-black" />
               <p className="text-[10px] sm:text-xs font-semibold tracking-[0.15em] sm:tracking-[0.2em] text-black/60 uppercase">
-                새로운 기준을 제시합니다
+                새로운 기준을 제시합니다ㄹㄴㅁㅇㅁㄴㄹㅇㅁㄴㄹㅇㅁㄴㅇㄹ
               </p>
             </div>
 
@@ -38,15 +39,19 @@ export default function Hero() {
 
             {/* CTA */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4 sm:mb-6 max-w-lg mx-auto lg:mx-0">
-              <input
-                type="email"
-                placeholder="이메일을 입력하세요"
-                className="flex-1 px-4 sm:px-6 py-3 sm:py-4 bg-neutral-50 border-0 text-black placeholder-black/30 focus:outline-none focus:ring-2 focus:ring-black/10 transition-all duration-300 text-sm sm:text-base"
-              />
-              <button className="group relative bg-black text-white px-6 sm:px-8 lg:px-10 py-3 sm:py-4 text-sm font-semibold tracking-wide overflow-hidden whitespace-nowrap transition-all duration-500 hover:shadow-2xl hover:shadow-black/25">
-                <span className="relative z-10">무료 체험 신청</span>
+              <Link
+                href="/register"
+                className="group relative bg-black text-white px-6 sm:px-8 lg:px-10 py-3 sm:py-4 text-sm font-semibold tracking-wide overflow-hidden whitespace-nowrap transition-all duration-500 hover:shadow-2xl hover:shadow-black/25 text-center"
+              >
+                <span className="relative z-10">무료로 시작하기</span>
                 <div className="absolute inset-0 bg-neutral-800 translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
-              </button>
+              </Link>
+              <Link
+                href="/login"
+                className="px-6 sm:px-8 lg:px-10 py-3 sm:py-4 text-sm font-semibold tracking-wide border border-black/20 text-black hover:bg-black/5 transition-colors text-center"
+              >
+                로그인
+              </Link>
             </div>
             <p className="text-xs font-medium text-black/40">
               무료로 시작하세요. 약정 없이 이용 가능합니다.

@@ -12,11 +12,14 @@ RUN addgroup -g 1001 nodejs && adduser -u 1001 -G nodejs -D nextjs
 # Copy package files
 COPY --chown=nextjs:nodejs package.json package-lock.json ./
 
-# Install dependencies
-RUN npm ci
+# Install dependencies as root, then fix ownership
+RUN npm ci && chown -R nextjs:nodejs /app
 
 # Copy source code (will be synced by Tilt)
 COPY --chown=nextjs:nodejs . .
+
+# Create .next directory with correct permissions
+RUN mkdir -p /app/.next && chown -R nextjs:nodejs /app/.next
 
 USER nextjs
 

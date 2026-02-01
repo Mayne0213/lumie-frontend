@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { Sparkles } from 'lucide-react';
 
 export default function FinalCTA() {
@@ -18,9 +19,9 @@ export default function FinalCTA() {
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-5 lg:mb-6">
               Save 6-7 days every week.
             </h2>
-            <button className="px-6 sm:px-7 lg:px-8 py-3 sm:py-3.5 bg-neutral-900 text-white text-sm font-semibold tracking-wide rounded-full hover:bg-neutral-800 transition-colors">
-              Get started FREE
-            </button>
+            <Link href="/register" className="inline-block px-6 sm:px-7 lg:px-8 py-3 sm:py-3.5 bg-neutral-900 text-white text-sm font-semibold tracking-wide rounded-full hover:bg-neutral-800 transition-colors">
+              무료로 시작하기
+            </Link>
           </div>
 
           {/* Mockups - inside gradient, clipped at bottom */}

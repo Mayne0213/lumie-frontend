@@ -2,22 +2,24 @@
 # =====================================
 # Usage: tilt up
 
+allow_k8s_contexts('lumie-dev')
+
 REGISTRY = 'zot0213.kro.kr'
 NAMESPACE = 'lumie-dev'
 
 # Environment variables
+# Development: Browser calls localhost port-forwarded services
+# Production: Browser calls /api/* (Kong routes to backend)
 ENV_VARS = {
     'NODE_ENV': 'development',
     'NEXT_TELEMETRY_DISABLED': '1',
-    # Backend services (within lumie-dev namespace)
-    'AUTH_SERVICE_URL': 'http://auth-svc.lumie-dev.svc.cluster.local:8080',
-    'TENANT_SERVICE_URL': 'http://tenant-svc.lumie-dev.svc.cluster.local:8080',
-    'BILLING_SERVICE_URL': 'http://billing-svc.lumie-dev.svc.cluster.local:8080',
-    'ACADEMY_SERVICE_URL': 'http://academy-svc.lumie-dev.svc.cluster.local:8080',
-    'EXAM_SERVICE_URL': 'http://exam-svc.lumie-dev.svc.cluster.local:8080',
-    'CONTENT_SERVICE_URL': 'http://content-svc.lumie-dev.svc.cluster.local:8080',
-    'FILE_SERVICE_URL': 'http://file-svc.lumie-dev.svc.cluster.local:8080',
-    'GRADING_SERVICE_URL': 'http://grading-svc.lumie-dev.svc.cluster.local:8000',
+    # Client-side: Browser accessible URLs (port-forwarded by backend Tilt)
+    'NEXT_PUBLIC_AUTH_SERVICE_URL': 'http://localhost:18081',
+    'NEXT_PUBLIC_ACADEMY_SERVICE_URL': 'http://localhost:18083',
+    'NEXT_PUBLIC_EXAM_SERVICE_URL': 'http://localhost:18084',
+    'NEXT_PUBLIC_CONTENT_SERVICE_URL': 'http://localhost:18085',
+    'NEXT_PUBLIC_FILE_SERVICE_URL': 'http://localhost:18086',
+    'NEXT_PUBLIC_GRADING_SERVICE_URL': 'http://localhost:18087',
 }
 
 def generate_env_yaml():
