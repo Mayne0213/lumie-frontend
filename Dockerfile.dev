@@ -1,0 +1,30 @@
+# Development Dockerfile for Next.js with hot reload
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install dependencies
+RUN apk add --no-cache libc6-compat
+
+# Create non-root user
+RUN addgroup -g 1001 nodejs && adduser -u 1001 -G nodejs -D nextjs
+
+# Copy package files
+COPY --chown=nextjs:nodejs package.json package-lock.json ./
+
+# Install dependencies
+RUN npm ci
+
+# Copy source code (will be synced by Tilt)
+COPY --chown=nextjs:nodejs . .
+
+USER nextjs
+
+EXPOSE 3000
+
+ENV NODE_ENV=development
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV HOSTNAME=0.0.0.0
+
+# Run dev server with hot reload
+CMD ["npm", "run", "dev"]
