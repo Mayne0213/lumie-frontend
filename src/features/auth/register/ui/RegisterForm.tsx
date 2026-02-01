@@ -2,8 +2,8 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { RegisterRequest, registerRequestSchema } from '@/entities/session';
-import { useRegister } from '../model/useRegister';
+import { OwnerRegisterRequest, ownerRegisterRequestSchema } from '@/entities/session';
+import { useRegisterOwner } from '../model/useRegisterOwner';
 import { Button } from '@/src/shared/ui/Button';
 import { Input } from '@/src/shared/ui/Input';
 import { ApiError } from '@/src/shared/types/api';
@@ -14,19 +14,21 @@ export function RegisterForm() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<RegisterRequest>({
-    resolver: zodResolver(registerRequestSchema),
+  } = useForm<OwnerRegisterRequest>({
+    resolver: zodResolver(ownerRegisterRequestSchema),
     defaultValues: {
       email: '',
       password: '',
       name: '',
+      instituteName: '',
+      businessRegistrationNumber: '',
     },
   });
 
-  const { mutate: registerUser, isPending, error } = useRegister();
+  const { mutate: registerOwner, isPending, error } = useRegisterOwner();
 
-  const onSubmit = (data: RegisterRequest) => {
-    registerUser(data);
+  const onSubmit = (data: OwnerRegisterRequest) => {
+    registerOwner(data);
   };
 
   const apiError = error as ApiError | null;
@@ -40,7 +42,23 @@ export function RegisterForm() {
       )}
 
       <Input
-        label="이름"
+        label="기관명"
+        type="text"
+        placeholder="루미에학원"
+        error={errors.instituteName?.message}
+        {...register('instituteName')}
+      />
+
+      <Input
+        label="사업자등록번호"
+        type="text"
+        placeholder="123-45-67890"
+        error={errors.businessRegistrationNumber?.message}
+        {...register('businessRegistrationNumber')}
+      />
+
+      <Input
+        label="대표자 이름"
         type="text"
         placeholder="홍길동"
         error={errors.name?.message}
@@ -64,7 +82,7 @@ export function RegisterForm() {
       />
 
       <Button type="submit" className="w-full" loading={isPending}>
-        회원가입
+        학원 등록
       </Button>
 
       <p className="text-center text-sm text-gray-600">

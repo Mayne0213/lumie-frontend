@@ -6,12 +6,14 @@ export {
   type LoginResponse,
   type LoginRequest,
   type RegisterRequest,
+  type OwnerRegisterRequest,
   RoleSchema,
   userSchema,
   authTokensSchema,
   loginResponseSchema,
   loginRequestSchema,
   registerRequestSchema,
+  ownerRegisterRequestSchema,
 } from './model/schema';
 
 export {

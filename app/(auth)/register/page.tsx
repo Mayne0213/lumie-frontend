@@ -5,7 +5,7 @@ import { RegisterForm } from '@/features/auth';
 export default function RegisterPage() {
   return (
     <div>
-      <h2 className="text-xl font-semibold text-gray-900 mb-6 text-center">회원가입</h2>
+      <h2 className="text-xl font-semibold text-gray-900 mb-6 text-center">학원 등록</h2>
       <RegisterForm />
     </div>
   );

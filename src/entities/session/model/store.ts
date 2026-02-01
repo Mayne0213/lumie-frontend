@@ -1,7 +1,7 @@
 'use client';
 
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
 import { User, Role } from './schema';
 import { storage } from '@/src/shared/lib/storage';
 
@@ -15,6 +15,26 @@ interface SessionState {
   logout: () => void;
   setLoading: (loading: boolean) => void;
 }
+
+// Custom storage that syncs to both localStorage and cookie
+const cookieSyncStorage: StateStorage = {
+  getItem: (name: string): string | null => {
+    if (typeof window === 'undefined') return null;
+    return localStorage.getItem(name);
+  },
+  setItem: (name: string, value: string): void => {
+    if (typeof window === 'undefined') return;
+    localStorage.setItem(name, value);
+    // Sync to cookie for middleware access (7 days expiry)
+    document.cookie = `${name}=${encodeURIComponent(value)}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax`;
+  },
+  removeItem: (name: string): void => {
+    if (typeof window === 'undefined') return;
+    localStorage.removeItem(name);
+    // Remove cookie
+    document.cookie = `${name}=; path=/; max-age=0`;
+  },
+};
 
 export const useSessionStore = create<SessionState>()(
   persist(
@@ -55,6 +75,7 @@ export const useSessionStore = create<SessionState>()(
     }),
     {
       name: 'lumie-session',
+      storage: createJSONStorage(() => cookieSyncStorage),
       partialize: (state) => ({
         user: state.user,
         isAuthenticated: state.isAuthenticated,

@@ -1,25 +1,18 @@
 # Lumie Frontend Development with Tilt
 # =====================================
 # Usage: tilt up
+# Access: https://dev.lumie0213.kro.kr
 
 allow_k8s_contexts('lumie-dev')
 
 REGISTRY = 'zot0213.kro.kr'
 NAMESPACE = 'lumie-dev'
+DEV_DOMAIN = 'dev.lumie0213.kro.kr'
 
 # Environment variables
-# Development: Browser calls localhost port-forwarded services
-# Production: Browser calls /api/* (Kong routes to backend)
 ENV_VARS = {
     'NODE_ENV': 'development',
     'NEXT_TELEMETRY_DISABLED': '1',
-    # Client-side: Browser accessible URLs (port-forwarded by backend Tilt)
-    'NEXT_PUBLIC_AUTH_SERVICE_URL': 'http://localhost:18081',
-    'NEXT_PUBLIC_ACADEMY_SERVICE_URL': 'http://localhost:18083',
-    'NEXT_PUBLIC_EXAM_SERVICE_URL': 'http://localhost:18084',
-    'NEXT_PUBLIC_CONTENT_SERVICE_URL': 'http://localhost:18085',
-    'NEXT_PUBLIC_FILE_SERVICE_URL': 'http://localhost:18086',
-    'NEXT_PUBLIC_GRADING_SERVICE_URL': 'http://localhost:18087',
 }
 
 def generate_env_yaml():
@@ -67,10 +60,9 @@ spec:
         env:%s
         resources:
           requests:
-            cpu: 15m
-            memory: 256Mi
+            cpu: 100m
+            memory: 512Mi
           limits:
-            cpu: 500m
             memory: 1Gi
         livenessProbe:
           httpGet:
@@ -110,8 +102,69 @@ spec:
     protocol: TCP
 ''' % NAMESPACE
 
+# Ingress YAML (Kong)
+ingress_yaml = '''
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lumie-frontend-ingress
+  namespace: %s
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    konghq.com/plugins: lumie-dev-cors
+spec:
+  ingressClassName: kong
+  tls:
+  - hosts:
+    - %s
+    secretName: lumie-dev-tls
+  rules:
+  - host: %s
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: lumie-frontend
+            port:
+              number: 3000
+''' % (NAMESPACE, DEV_DOMAIN, DEV_DOMAIN)
+
+# CORS Plugin for development
+cors_plugin_yaml = '''
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: lumie-dev-cors
+  namespace: %s
+config:
+  origins:
+  - "https://%s"
+  - "http://%s"
+  methods:
+  - GET
+  - POST
+  - PUT
+  - PATCH
+  - DELETE
+  - OPTIONS
+  headers:
+  - Accept
+  - Authorization
+  - Content-Type
+  - X-Tenant-Slug
+  exposed_headers:
+  - X-Request-Id
+  credentials: true
+  max_age: 3600
+plugin: cors
+''' % (NAMESPACE, DEV_DOMAIN, DEV_DOMAIN)
+
 k8s_yaml(blob(deployment_yaml))
 k8s_yaml(blob(service_yaml))
+k8s_yaml(blob(ingress_yaml))
+k8s_yaml(blob(cors_plugin_yaml))
 
 # Docker build with live_update (true hot reload for Next.js)
 docker_build(
@@ -135,6 +188,6 @@ docker_build(
 
 k8s_resource(
     'lumie-frontend',
-    port_forwards=['3000:3000'],
+    # No port-forward needed - access via https://dev.lumie0213.kro.kr
     labels=['lumie-dev'],
 )
