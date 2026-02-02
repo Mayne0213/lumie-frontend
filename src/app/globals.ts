@@ -18,4 +18,3 @@ export const ROUTES = {
   ADMIN: '/admin',
 } as const;
 
-export const DEFAULT_TENANT_SLUG = 'demo';

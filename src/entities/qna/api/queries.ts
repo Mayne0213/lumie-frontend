@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { contentClient } from '@/src/shared/api/base';
 import { Qna, CreateQnaInput, AnswerQnaInput } from '../model/schema';
 import { PaginatedResponse, PaginationParams } from '@/src/shared/types/api';
@@ -56,6 +57,7 @@ export function useCreateQna() {
       contentClient.post<Qna>('/api/v1/qna', data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.all });
+      toast.success('질문이 등록되었습니다.');
     },
   });
 }
@@ -68,6 +70,7 @@ export function useAnswerQna(id: number) {
       contentClient.post<Qna>(`/api/v1/qna/${id}/answer`, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.all });
+      toast.success('답변이 등록되었습니다.');
     },
   });
 }
@@ -79,6 +82,7 @@ export function useCloseQna(id: number) {
     mutationFn: () => contentClient.post<Qna>(`/api/v1/qna/${id}/close`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.all });
+      toast.success('질문이 종료되었습니다.');
     },
   });
 }
@@ -90,6 +94,7 @@ export function useDeleteQna() {
     mutationFn: (id: number) => contentClient.delete<void>(`/api/v1/qna/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.all });
+      toast.success('질문이 삭제되었습니다.');
     },
   });
 }

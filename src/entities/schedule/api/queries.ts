@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { contentClient } from '@/src/shared/api/base';
 import { Schedule, CreateScheduleInput, Reservation } from '../model/schema';
 import { PaginatedResponse, PaginationParams } from '@/src/shared/types/api';
@@ -51,6 +52,7 @@ export function useCreateSchedule() {
       contentClient.post<Schedule>('/api/v1/schedules', data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.all });
+      toast.success('스케줄이 등록되었습니다.');
     },
   });
 }
@@ -62,6 +64,7 @@ export function useDeleteSchedule() {
     mutationFn: (id: number) => contentClient.delete<void>(`/api/v1/schedules/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.all });
+      toast.success('스케줄이 삭제되었습니다.');
     },
   });
 }
@@ -83,6 +86,7 @@ export function useBookSchedule() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.all });
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.myReservations() });
+      toast.success('예약이 완료되었습니다.');
     },
   });
 }
@@ -96,6 +100,7 @@ export function useCancelReservation() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.all });
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.myReservations() });
+      toast.success('예약이 취소되었습니다.');
     },
   });
 }

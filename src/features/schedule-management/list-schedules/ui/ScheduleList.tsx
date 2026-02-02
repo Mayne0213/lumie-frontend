@@ -48,7 +48,6 @@ export function ScheduleList({ isAdmin = false }: ScheduleListProps) {
   const handleBook = (scheduleId: number) => {
     setBookingId(scheduleId);
     bookSchedule(scheduleId, {
-      onSuccess: () => alert('예약이 완료되었습니다.'),
       onSettled: () => setBookingId(null),
     });
   };

@@ -45,15 +45,16 @@ export function middleware(request: NextRequest) {
   const isAuthenticated = session?.user != null;
   const userRole = session?.user?.role;
 
-  // Not authenticated - redirect to login
+  // Not authenticated - redirect to home with login modal
   if (!isAuthenticated) {
-    // Don't redirect if already on auth routes
-    if (AUTH_ROUTES.test(pathname)) {
+    // Don't redirect if already on auth routes or home
+    if (AUTH_ROUTES.test(pathname) || pathname === '/') {
       return NextResponse.next();
     }
-    const loginUrl = new URL('/login', request.url);
-    loginUrl.searchParams.set('callbackUrl', pathname);
-    return NextResponse.redirect(loginUrl);
+    const homeUrl = new URL('/', request.url);
+    homeUrl.searchParams.set('auth', 'login');
+    homeUrl.searchParams.set('callbackUrl', pathname);
+    return NextResponse.redirect(homeUrl);
   }
 
   // Already authenticated - redirect away from auth pages

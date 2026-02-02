@@ -3,6 +3,7 @@
 import { ApiError } from '@/src/shared/types/api';
 import { storage } from '@/src/shared/lib/storage';
 import { ENV } from '@/src/shared/config/env';
+import { toast } from 'sonner';
 
 interface RequestOptions extends RequestInit {
   skipAuth?: boolean;
@@ -11,9 +12,11 @@ interface RequestOptions extends RequestInit {
 async function handleResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {
     const error = await response.json().catch(() => ({ message: 'Unknown error' }));
+    const errorMessage = error.message || `HTTP ${response.status}`;
+    toast.error(errorMessage);
     throw {
       status: response.status,
-      message: error.message || `HTTP ${response.status}`,
+      message: errorMessage,
       code: error.code,
     } as ApiError;
   }
@@ -28,13 +31,19 @@ async function handleResponse<T>(response: Response): Promise<T> {
 
 function getHeaders(
   options: RequestOptions,
-  tenantSlug: string = ENV.DEFAULT_TENANT_SLUG
+  tenantSlug?: string
 ): HeadersInit {
+  // Priority: explicit param > session (no default - error if needed but not available)
+  const slug = tenantSlug ?? storage.getTenantSlug();
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
-    'X-Tenant-Slug': tenantSlug,
     ...options.headers,
   };
+
+  // Only add X-Tenant-Slug if available
+  if (slug) {
+    (headers as Record<string, string>)['X-Tenant-Slug'] = slug;
+  }
 
   if (!options.skipAuth) {
     const token = storage.getAccessToken();

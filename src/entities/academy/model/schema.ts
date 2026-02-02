@@ -6,6 +6,7 @@ export const academySchema = z.object({
   address: z.string().optional(),
   phone: z.string().optional(),
   description: z.string().optional(),
+  isActive: z.boolean().optional(),
   createdAt: z.string(),
   updatedAt: z.string(),
 });

@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { contentClient } from '@/src/shared/api/base';
 import { Announcement, CreateAnnouncementInput, UpdateAnnouncementInput } from '../model/schema';
 import { PaginatedResponse, PaginationParams } from '@/src/shared/types/api';
@@ -18,6 +19,7 @@ export function useAnnouncements(params?: AnnouncementQueryParams) {
     queryKey: QUERY_KEYS.list(params),
     queryFn: () => {
       const searchParams = new URLSearchParams();
+      searchParams.set('isAsset', 'false');
       if (params?.page !== undefined) searchParams.set('page', String(params.page));
       if (params?.size !== undefined) searchParams.set('size', String(params.size));
       if (params?.sort) searchParams.set('sort', params.sort);
@@ -30,11 +32,11 @@ export function useAnnouncements(params?: AnnouncementQueryParams) {
   });
 }
 
-export function useAnnouncement(id: number) {
+export function useAnnouncement(id: number, options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: QUERY_KEYS.detail(id),
     queryFn: () => contentClient.get<Announcement>(`/api/v1/announcements/${id}`),
-    enabled: id > 0,
+    enabled: options?.enabled ?? id > 0,
   });
 }
 
@@ -46,6 +48,7 @@ export function useCreateAnnouncement() {
       contentClient.post<Announcement>('/api/v1/announcements', data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.all });
+      toast.success('공지사항이 등록되었습니다.');
     },
   });
 }
@@ -58,6 +61,7 @@ export function useUpdateAnnouncement(id: number) {
       contentClient.patch<Announcement>(`/api/v1/announcements/${id}`, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.all });
+      toast.success('공지사항이 수정되었습니다.');
     },
   });
 }
@@ -69,6 +73,7 @@ export function useDeleteAnnouncement() {
     mutationFn: (id: number) => contentClient.delete<void>(`/api/v1/announcements/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.all });
+      toast.success('공지사항이 삭제되었습니다.');
     },
   });
 }

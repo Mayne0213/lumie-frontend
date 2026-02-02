@@ -3,8 +3,6 @@
 # Usage: tilt up
 # Access: https://dev.lumie0213.kro.kr
 
-allow_k8s_contexts('lumie-dev')
-
 REGISTRY = 'zot0213.kro.kr'
 NAMESPACE = 'lumie-dev'
 DEV_DOMAIN = 'dev.lumie0213.kro.kr'
@@ -13,6 +11,7 @@ DEV_DOMAIN = 'dev.lumie0213.kro.kr'
 ENV_VARS = {
     'NODE_ENV': 'development',
     'NEXT_TELEMETRY_DISABLED': '1',
+    'NODE_OPTIONS': '--max-old-space-size=1536',
 }
 
 def generate_env_yaml():
@@ -60,10 +59,10 @@ spec:
         env:%s
         resources:
           requests:
-            cpu: 100m
-            memory: 512Mi
+            cpu: 50m
+            memory: 50Mi
           limits:
-            memory: 1Gi
+            memory: 2Gi
         livenessProbe:
           httpGet:
             path: /
@@ -161,10 +160,24 @@ config:
 plugin: cors
 ''' % (NAMESPACE, DEV_DOMAIN, DEV_DOMAIN)
 
-k8s_yaml(blob(deployment_yaml))
-k8s_yaml(blob(service_yaml))
-k8s_yaml(blob(ingress_yaml))
-k8s_yaml(blob(cors_plugin_yaml))
+# Create generated YAML directory
+local('mkdir -p .tilt/generated', quiet=True)
+
+# Combine all YAML for frontend
+combined_yaml = deployment_yaml + '\n---\n' + service_yaml + '\n---\n' + ingress_yaml + '\n---\n' + cors_plugin_yaml
+
+# Write YAML to file for explicit apply/delete
+yaml_path = '.tilt/generated/lumie-frontend.yaml'
+local("cat > '%s' << 'TILT_YAML_EOF'\n%s\nTILT_YAML_EOF" % (yaml_path, combined_yaml), quiet=True)
+
+# Use k8s_custom_deploy for explicit delete_cmd (ensures cleanup on tilt down)
+k8s_custom_deploy(
+    'lumie-frontend',
+    apply_cmd='kubectl apply -f %s' % yaml_path,
+    delete_cmd='kubectl delete -f %s --ignore-not-found' % yaml_path,
+    deps=[yaml_path],
+    image_deps=['%s/dev/lumie-frontend' % REGISTRY],
+)
 
 # Docker build with live_update (true hot reload for Next.js)
 docker_build(
@@ -172,10 +185,23 @@ docker_build(
     context='.',
     dockerfile='Dockerfile.dev',
     live_update=[
-        # Sync source files (Next.js Fast Refresh handles the rest)
-        sync('.', '/app'),
-        # Reinstall dependencies if package.json changes
-        run('npm install', trigger=['package.json', 'package-lock.json']),
+        # Fall back to full rebuild only for Dockerfile changes
+        fall_back_on(['Dockerfile.dev']),
+        # Sync source directories
+        sync('./app', '/app/app'),
+        sync('./src', '/app/src'),
+        sync('./components', '/app/components'),
+        sync('./hooks', '/app/hooks'),
+        sync('./lib', '/app/lib'),
+        sync('./public', '/app/public'),
+        # Sync config files
+        sync('./next.config.ts', '/app/next.config.ts'),
+        sync('./tsconfig.json', '/app/tsconfig.json'),
+        sync('./postcss.config.mjs', '/app/postcss.config.mjs'),
+        sync('./components.json', '/app/components.json'),
+        sync('./middleware.ts', '/app/middleware.ts'),
+        # Reinstall dependencies if package.json changes, then restart
+        run('cd /app && npm install', trigger=['package.json', 'package-lock.json']),
     ],
     ignore=[
         'node_modules',
@@ -183,6 +209,10 @@ docker_build(
         '.git',
         'test-results',
         'playwright-report',
+        'e2e',
+        '*.log',
+        '.env*',
+        'tsconfig.tsbuildinfo',
     ],
 )
 

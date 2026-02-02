@@ -4,10 +4,13 @@ import { z } from 'zod';
 export const RoleSchema = z.enum(['OWNER', 'DEVELOPER', 'ADMIN', 'STUDENT']);
 export type Role = z.infer<typeof RoleSchema>;
 
+// User login ID regex (letters, numbers, underscores only)
+const userLoginIdRegex = /^[a-zA-Z0-9_]+$/;
+
 // User schema
 export const userSchema = z.object({
   id: z.number(),
-  email: z.string().email(),
+  userLoginId: z.string(),
   name: z.string().min(2).max(100),
   role: RoleSchema,
   tenantSlug: z.string(),
@@ -39,7 +42,11 @@ export type LoginResponse = z.infer<typeof loginResponseSchema>;
 
 // Login request schema
 export const loginRequestSchema = z.object({
-  email: z.string().email('올바른 이메일 형식이 아닙니다.'),
+  userLoginId: z
+    .string()
+    .min(4, '아이디는 최소 4자 이상이어야 합니다.')
+    .max(50, '아이디는 50자를 초과할 수 없습니다.')
+    .regex(userLoginIdRegex, '아이디는 영문, 숫자, 밑줄(_)만 사용할 수 있습니다.'),
   password: z.string().min(1, '비밀번호를 입력해주세요.'),
 });
 
@@ -49,13 +56,19 @@ export type LoginRequest = z.infer<typeof loginRequestSchema>;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
 
 export const registerRequestSchema = z.object({
-  email: z.string().email('올바른 이메일 형식이 아닙니다.').max(255, '이메일은 255자를 초과할 수 없습니다.'),
+  tenantSlug: z.string().min(1, '테넌트를 선택해주세요.'),
+  userLoginId: z
+    .string()
+    .min(4, '아이디는 최소 4자 이상이어야 합니다.')
+    .max(50, '아이디는 50자를 초과할 수 없습니다.')
+    .regex(userLoginIdRegex, '아이디는 영문, 숫자, 밑줄(_)만 사용할 수 있습니다.'),
   password: z
     .string()
     .min(8, '비밀번호는 최소 8자 이상이어야 합니다.')
     .max(128, '비밀번호는 128자를 초과할 수 없습니다.')
     .regex(passwordRegex, '비밀번호는 대문자, 소문자, 숫자, 특수문자(@$!%*?&)를 각각 하나 이상 포함해야 합니다.'),
   name: z.string().min(2, '이름은 최소 2자 이상이어야 합니다.').max(100, '이름은 100자를 초과할 수 없습니다.'),
+  phone: z.string().optional(),
 });
 
 export type RegisterRequest = z.infer<typeof registerRequestSchema>;
@@ -64,13 +77,18 @@ export type RegisterRequest = z.infer<typeof registerRequestSchema>;
 const businessRegNumberRegex = /^\d{3}-\d{2}-\d{5}$/;
 
 export const ownerRegisterRequestSchema = z.object({
-  email: z.string().email('올바른 이메일 형식이 아닙니다.').max(255, '이메일은 255자를 초과할 수 없습니다.'),
+  userLoginId: z
+    .string()
+    .min(4, '아이디는 최소 4자 이상이어야 합니다.')
+    .max(50, '아이디는 50자를 초과할 수 없습니다.')
+    .regex(userLoginIdRegex, '아이디는 영문, 숫자, 밑줄(_)만 사용할 수 있습니다.'),
   password: z
     .string()
     .min(8, '비밀번호는 최소 8자 이상이어야 합니다.')
     .max(128, '비밀번호는 128자를 초과할 수 없습니다.')
     .regex(passwordRegex, '비밀번호는 대문자, 소문자, 숫자, 특수문자(@$!%*?&)를 각각 하나 이상 포함해야 합니다.'),
   name: z.string().min(2, '이름은 최소 2자 이상이어야 합니다.').max(100, '이름은 100자를 초과할 수 없습니다.'),
+  phone: z.string().optional(),
   instituteName: z.string().min(2, '기관명은 최소 2자 이상이어야 합니다.').max(200, '기관명은 200자를 초과할 수 없습니다.'),
   businessRegistrationNumber: z
     .string()

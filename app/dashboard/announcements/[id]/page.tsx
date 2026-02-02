@@ -47,16 +47,16 @@ export default function StudentAnnouncementDetailPage({ params }: PageProps) {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
-            {announcement.isPinned && <Pin className="w-5 h-5 text-blue-600" />}
-            <CardTitle>{announcement.title}</CardTitle>
+            {announcement.isItImportantAnnouncement && <Pin className="w-5 h-5 text-blue-600" />}
+            <CardTitle>{announcement.announcementTitle}</CardTitle>
           </div>
           <p className="text-sm text-gray-500 mt-1">
-            {announcement.authorName} · {new Date(announcement.createdAt).toLocaleDateString('ko-KR')}
+            {new Date(announcement.createdAt).toLocaleDateString('ko-KR')}
           </p>
         </CardHeader>
         <CardContent>
           <div className="prose max-w-none">
-            <p className="whitespace-pre-wrap">{announcement.content}</p>
+            <p className="whitespace-pre-wrap">{announcement.announcementContent}</p>
           </div>
         </CardContent>
       </Card>

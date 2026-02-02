@@ -2,7 +2,7 @@
 
 import { Student } from '../model/schema';
 import { Card, CardHeader, CardTitle, CardContent } from '@/src/shared/ui/Card';
-import { User, Mail, Phone, GraduationCap } from 'lucide-react';
+import { User, Phone, School, Calendar } from 'lucide-react';
 
 interface StudentCardProps {
   student: Student;
@@ -22,20 +22,22 @@ export function StudentCard({ student, onClick }: StudentCardProps) {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-2">
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-          <Mail className="w-4 h-4" />
-          <span>{student.email}</span>
-        </div>
         {student.phone && (
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <Phone className="w-4 h-4" />
             <span>{student.phone}</span>
           </div>
         )}
-        {student.grade && (
+        {student.studentBirthYear && (
           <div className="flex items-center gap-2 text-sm text-gray-600">
-            <GraduationCap className="w-4 h-4" />
-            <span>{student.grade}</span>
+            <Calendar className="w-4 h-4" />
+            <span>{student.studentBirthYear}년생</span>
+          </div>
+        )}
+        {student.studentHighschool && (
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <School className="w-4 h-4" />
+            <span>{student.studentHighschool}</span>
           </div>
         )}
       </CardContent>

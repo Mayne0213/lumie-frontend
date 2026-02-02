@@ -75,7 +75,7 @@ export function ExamResultsView({ examId, totalScore, passingScore }: ExamResult
                   <option value="">학생 선택</option>
                   {students.map((student) => (
                     <option key={student.id} value={student.id}>
-                      {student.name} ({student.email})
+                      {student.name} ({student.userLoginId})
                     </option>
                   ))}
                 </select>

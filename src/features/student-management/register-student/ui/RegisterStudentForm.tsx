@@ -18,15 +18,15 @@ export function RegisterStudentForm() {
     handleSubmit,
     formState: { errors },
     setValue,
-    watch,
   } = useForm<CreateStudentInput>({
     resolver: zodResolver(createStudentSchema),
     defaultValues: {
+      userLoginId: '',
+      password: '',
       name: '',
-      email: '',
       phone: '',
-      grade: '',
-      parentPhone: '',
+      studentHighschool: '',
+      studentMemo: '',
     },
   });
 
@@ -72,19 +72,27 @@ export function RegisterStudentForm() {
       </div>
 
       <Input
+        label="아이디 *"
+        type="text"
+        placeholder="영문, 숫자, 밑줄(_) 4자 이상"
+        error={errors.userLoginId?.message}
+        {...register('userLoginId')}
+      />
+
+      <Input
+        label="비밀번호 *"
+        type="password"
+        placeholder="8자 이상"
+        error={errors.password?.message}
+        {...register('password')}
+      />
+
+      <Input
         label="이름 *"
         type="text"
         placeholder="학생 이름을 입력하세요"
         error={errors.name?.message}
         {...register('name')}
-      />
-
-      <Input
-        label="이메일 *"
-        type="email"
-        placeholder="example@email.com"
-        error={errors.email?.message}
-        {...register('email')}
       />
 
       <Input
@@ -96,20 +104,30 @@ export function RegisterStudentForm() {
       />
 
       <Input
-        label="학년"
-        type="text"
-        placeholder="예: 고1, 중2"
-        error={errors.grade?.message}
-        {...register('grade')}
+        label="출생연도"
+        type="number"
+        placeholder="예: 2008"
+        error={errors.studentBirthYear?.message}
+        {...register('studentBirthYear', { valueAsNumber: true })}
       />
 
       <Input
-        label="학부모 연락처"
-        type="tel"
-        placeholder="학부모 연락처를 입력하세요"
-        error={errors.parentPhone?.message}
-        {...register('parentPhone')}
+        label="학교"
+        type="text"
+        placeholder="예: OO고등학교"
+        error={errors.studentHighschool?.message}
+        {...register('studentHighschool')}
       />
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">메모</label>
+        <textarea
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          rows={3}
+          placeholder="학생 메모를 입력하세요"
+          {...register('studentMemo')}
+        />
+      </div>
 
       <div className="flex gap-3">
         <Button type="submit" loading={isPending}>

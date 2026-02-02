@@ -9,11 +9,12 @@ import { ApiError } from '@/src/shared/types/api';
 import { Upload, FileText, X } from 'lucide-react';
 
 interface ParsedStudent {
+  userLoginId: string;
+  password: string;
   name: string;
-  email: string;
   phone?: string;
-  grade?: string;
-  parentPhone?: string;
+  studentHighschool?: string;
+  studentBirthYear?: number;
 }
 
 export function BulkImportForm() {
@@ -37,26 +38,28 @@ export function BulkImportForm() {
         const headers = lines[0].split(',').map((h) => h.trim().toLowerCase());
 
         const nameIdx = headers.findIndex((h) => h.includes('이름') || h.includes('name'));
-        const emailIdx = headers.findIndex((h) => h.includes('이메일') || h.includes('email'));
+        const loginIdIdx = headers.findIndex((h) => h.includes('아이디') || h.includes('loginid') || h.includes('id'));
+        const passwordIdx = headers.findIndex((h) => h.includes('비밀번호') || h.includes('password'));
         const phoneIdx = headers.findIndex((h) => h.includes('연락처') || h.includes('phone'));
-        const gradeIdx = headers.findIndex((h) => h.includes('학년') || h.includes('grade'));
-        const parentPhoneIdx = headers.findIndex((h) => h.includes('학부모') || h.includes('parent'));
+        const schoolIdx = headers.findIndex((h) => h.includes('학교') || h.includes('school'));
+        const birthYearIdx = headers.findIndex((h) => h.includes('출생') || h.includes('birth'));
 
-        if (nameIdx === -1 || emailIdx === -1) {
-          setParseError('CSV 파일에 이름과 이메일 열이 필요합니다.');
+        if (nameIdx === -1 || loginIdIdx === -1 || passwordIdx === -1) {
+          setParseError('CSV 파일에 이름, 아이디, 비밀번호 열이 필요합니다.');
           return;
         }
 
         const students: ParsedStudent[] = [];
         for (let i = 1; i < lines.length; i++) {
           const values = lines[i].split(',').map((v) => v.trim());
-          if (values[nameIdx] && values[emailIdx]) {
+          if (values[nameIdx] && values[loginIdIdx] && values[passwordIdx]) {
             students.push({
               name: values[nameIdx],
-              email: values[emailIdx],
+              userLoginId: values[loginIdIdx],
+              password: values[passwordIdx],
               phone: phoneIdx >= 0 ? values[phoneIdx] : undefined,
-              grade: gradeIdx >= 0 ? values[gradeIdx] : undefined,
-              parentPhone: parentPhoneIdx >= 0 ? values[parentPhoneIdx] : undefined,
+              studentHighschool: schoolIdx >= 0 ? values[schoolIdx] : undefined,
+              studentBirthYear: birthYearIdx >= 0 ? parseInt(values[birthYearIdx]) || undefined : undefined,
             });
           }
         }
@@ -80,8 +83,7 @@ export function BulkImportForm() {
     bulkImport(
       { academyId: selectedAcademy, students: parsedStudents },
       {
-        onSuccess: (result) => {
-          alert(`${result.imported}명 등록 완료, ${result.failed}명 실패`);
+        onSuccess: () => {
           router.push('/admin/students');
         },
       }
@@ -124,7 +126,7 @@ export function BulkImportForm() {
         <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
           <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
           <p className="text-sm text-gray-600 mb-2">
-            CSV 파일을 업로드하세요 (이름, 이메일 필수)
+            CSV 파일을 업로드하세요 (이름, 아이디, 비밀번호 필수)
           </p>
           <input
             type="file"
@@ -153,9 +155,9 @@ export function BulkImportForm() {
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-4 py-2 text-left">이름</th>
-                  <th className="px-4 py-2 text-left">이메일</th>
+                  <th className="px-4 py-2 text-left">아이디</th>
                   <th className="px-4 py-2 text-left">연락처</th>
-                  <th className="px-4 py-2 text-left">학년</th>
+                  <th className="px-4 py-2 text-left">학교</th>
                   <th className="px-4 py-2 w-12"></th>
                 </tr>
               </thead>
@@ -163,9 +165,9 @@ export function BulkImportForm() {
                 {parsedStudents.map((student, index) => (
                   <tr key={index}>
                     <td className="px-4 py-2">{student.name}</td>
-                    <td className="px-4 py-2">{student.email}</td>
+                    <td className="px-4 py-2">{student.userLoginId}</td>
                     <td className="px-4 py-2">{student.phone || '-'}</td>
-                    <td className="px-4 py-2">{student.grade || '-'}</td>
+                    <td className="px-4 py-2">{student.studentHighschool || '-'}</td>
                     <td className="px-4 py-2">
                       <button
                         onClick={() => handleRemoveStudent(index)}

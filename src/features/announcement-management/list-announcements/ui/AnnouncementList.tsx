@@ -4,9 +4,18 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAnnouncements, useDeleteAnnouncement } from '@/entities/announcement';
 import { useAcademies } from '@/entities/academy';
-import { Button } from '@/src/shared/ui/Button';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/src/shared/ui/Card';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
 import { Plus, Trash2, Pin, Bell } from 'lucide-react';
+import { EditAnnouncementModal } from '../../edit-announcement/ui/EditAnnouncementModal';
 
 interface AnnouncementListProps {
   isAdmin?: boolean;
@@ -14,11 +23,15 @@ interface AnnouncementListProps {
 
 export function AnnouncementList({ isAdmin = false }: AnnouncementListProps) {
   const router = useRouter();
-  const [selectedAcademy, setSelectedAcademy] = useState<number | undefined>();
-  const { data: academiesData } = useAcademies();
-  const { data, isLoading, error } = useAnnouncements({ academyId: selectedAcademy });
-  const { mutate: deleteAnnouncement, isPending: isDeleting } = useDeleteAnnouncement();
+  const [selectedAcademy, setSelectedAcademy] = useState<string>('all');
+  const [editingId, setEditingId] = useState<number | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
+
+  const { data: academiesData } = useAcademies();
+  const { data, isLoading, error } = useAnnouncements({
+    academyId: selectedAcademy !== 'all' ? Number(selectedAcademy) : undefined
+  });
+  const { mutate: deleteAnnouncement, isPending: isDeleting } = useDeleteAnnouncement();
 
   const handleDelete = (id: number, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -30,7 +43,14 @@ export function AnnouncementList({ isAdmin = false }: AnnouncementListProps) {
     }
   };
 
-  const basePath = isAdmin ? '/admin/announcements' : '/dashboard/announcements';
+  const handleCardClick = (id: number) => {
+    if (isAdmin) {
+      setEditingId(id);
+    } else {
+      router.push(`/dashboard/announcements/${id}`);
+    }
+  };
+
   const academies = academiesData?.content ?? [];
   const announcements = data?.content ?? [];
 
@@ -54,26 +74,28 @@ export function AnnouncementList({ isAdmin = false }: AnnouncementListProps) {
     <div className="space-y-4">
       <div className="flex flex-wrap gap-4 justify-between items-center">
         <div className="flex items-center gap-4">
-          <h2 className="text-lg font-semibold text-gray-900">
-            공지사항 ({data?.totalElements ?? 0}개)
-          </h2>
+          <h1 className="text-3xl font-bold">공지사항</h1>
+          <Badge variant="secondary" className="text-lg px-3 py-1">
+            총 {data?.totalElements ?? 0}개
+          </Badge>
           {isAdmin && (
-            <select
-              className="px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={selectedAcademy ?? ''}
-              onChange={(e) => setSelectedAcademy(e.target.value ? Number(e.target.value) : undefined)}
-            >
-              <option value="">전체 학원</option>
-              {academies.map((academy) => (
-                <option key={academy.id} value={academy.id}>
-                  {academy.name}
-                </option>
-              ))}
-            </select>
+            <Select value={selectedAcademy} onValueChange={setSelectedAcademy}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="학원 선택" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">전체 학원</SelectItem>
+                {academies.map((academy) => (
+                  <SelectItem key={academy.id} value={String(academy.id)}>
+                    {academy.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           )}
         </div>
         {isAdmin && (
-          <Button onClick={() => router.push(`${basePath}/new`)}>
+          <Button onClick={() => router.push('/admin/announcements/new')}>
             <Plus className="w-4 h-4 mr-2" />
             공지 작성
           </Button>
@@ -91,22 +113,22 @@ export function AnnouncementList({ isAdmin = false }: AnnouncementListProps) {
             <Card
               key={announcement.id}
               className="cursor-pointer hover:shadow-md transition-shadow"
-              onClick={() => router.push(`${basePath}/${announcement.id}`)}
+              onClick={() => handleCardClick(announcement.id)}
             >
               <CardContent className="p-4">
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
-                      {announcement.isPinned && (
+                      {announcement.isItImportantAnnouncement && (
                         <Pin className="w-4 h-4 text-blue-600" />
                       )}
-                      <h3 className="font-semibold text-gray-900">{announcement.title}</h3>
+                      <h3 className="font-semibold text-gray-900">{announcement.announcementTitle}</h3>
                     </div>
                     <p className="text-sm text-gray-500 mt-1 line-clamp-2">
-                      {announcement.content}
+                      {announcement.announcementContent}
                     </p>
                     <p className="text-xs text-gray-400 mt-2">
-                      {announcement.authorName} · {new Date(announcement.createdAt).toLocaleDateString('ko-KR')}
+                      {new Date(announcement.createdAt).toLocaleDateString('ko-KR')}
                     </p>
                   </div>
                   {isAdmin && (
@@ -123,6 +145,15 @@ export function AnnouncementList({ isAdmin = false }: AnnouncementListProps) {
             </Card>
           ))}
         </div>
+      )}
+
+      {/* Edit Modal (admin only) */}
+      {isAdmin && (
+        <EditAnnouncementModal
+          announcementId={editingId}
+          open={!!editingId}
+          onOpenChange={(open) => !open && setEditingId(null)}
+        />
       )}
     </div>
   );

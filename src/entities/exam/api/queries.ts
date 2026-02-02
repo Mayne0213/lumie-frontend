@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { examClient } from '@/src/shared/api/base';
 import {
   Exam,
@@ -56,6 +57,7 @@ export function useCreateExam() {
       examClient.post<Exam>('/api/v1/exams', data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.all });
+      toast.success('시험이 생성되었습니다.');
     },
   });
 }
@@ -68,6 +70,7 @@ export function useUpdateExam(id: number) {
       examClient.patch<Exam>(`/api/v1/exams/${id}`, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.all });
+      toast.success('시험 정보가 수정되었습니다.');
     },
   });
 }
@@ -79,6 +82,7 @@ export function usePublishExam(id: number) {
     mutationFn: () => examClient.post<Exam>(`/api/v1/exams/${id}/publish`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.all });
+      toast.success('시험이 공개되었습니다.');
     },
   });
 }
@@ -90,6 +94,7 @@ export function useCloseExam(id: number) {
     mutationFn: () => examClient.post<Exam>(`/api/v1/exams/${id}/close`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.all });
+      toast.success('시험이 종료되었습니다.');
     },
   });
 }
@@ -101,6 +106,7 @@ export function useDeleteExam() {
     mutationFn: (id: number) => examClient.delete<void>(`/api/v1/exams/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.all });
+      toast.success('시험이 삭제되었습니다.');
     },
   });
 }
@@ -123,6 +129,7 @@ export function useSubmitExamResult(examId: number) {
       examClient.post<ExamResult>(`/api/v1/exams/${examId}/results`, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.results(examId) });
+      toast.success('성적이 등록되었습니다.');
     },
   });
 }

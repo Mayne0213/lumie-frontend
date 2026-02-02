@@ -1,12 +1,5 @@
-'use client';
-
-import { RegisterForm } from '@/features/auth';
+import { redirect } from 'next/navigation';
 
 export default function RegisterPage() {
-  return (
-    <div>
-      <h2 className="text-xl font-semibold text-gray-900 mb-6 text-center">학원 등록</h2>
-      <RegisterForm />
-    </div>
-  );
+  redirect('/?auth=register');
 }

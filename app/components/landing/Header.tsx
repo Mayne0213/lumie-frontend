@@ -3,9 +3,11 @@
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
+import { useAuthModal } from '@/src/shared/providers/AuthModalProvider';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { openLogin, openRegister } = useAuthModal();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-2xl border-b border-black/5">
@@ -24,13 +26,19 @@ export default function Header() {
 
         {/* Desktop Right side */}
         <div className="hidden sm:flex items-center gap-2">
-          <Link href="/login" className="px-3 sm:px-4 lg:px-5 py-2 sm:py-2.5 text-sm font-medium text-neutral-500 hover:text-black transition-colors duration-300">
+          <button
+            onClick={openLogin}
+            className="px-3 sm:px-4 lg:px-5 py-2 sm:py-2.5 text-sm font-medium text-neutral-500 hover:text-black transition-colors duration-300"
+          >
             로그인
-          </Link>
-          <Link href="/register" className="group relative rounded-lg sm:rounded-xl bg-black text-white px-4 sm:px-5 lg:px-7 py-2.5 sm:py-3 text-sm font-semibold tracking-wide overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-black/20">
+          </button>
+          <button
+            onClick={openRegister}
+            className="group relative rounded-lg sm:rounded-xl bg-black text-white px-4 sm:px-5 lg:px-7 py-2.5 sm:py-3 text-sm font-semibold tracking-wide overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-black/20"
+          >
             <span className="relative z-10">시작하기</span>
             <div className="absolute inset-0 bg-neutral-800 translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
-          </Link>
+          </button>
         </div>
 
         {/* Mobile menu button */}
@@ -45,12 +53,24 @@ export default function Header() {
       {/* Mobile menu */}
       {isMenuOpen && (
         <div className="sm:hidden bg-white border-t border-black/5 px-4 py-4 space-y-3">
-          <Link href="/login" className="block py-2 text-sm font-medium text-neutral-500 hover:text-black transition-colors">
+          <button
+            onClick={() => {
+              openLogin();
+              setIsMenuOpen(false);
+            }}
+            className="block w-full text-left py-2 text-sm font-medium text-neutral-500 hover:text-black transition-colors"
+          >
             로그인
-          </Link>
-          <Link href="/register" className="block w-full bg-black text-white px-4 py-3 text-sm font-semibold rounded-lg text-center">
+          </button>
+          <button
+            onClick={() => {
+              openRegister();
+              setIsMenuOpen(false);
+            }}
+            className="block w-full bg-black text-white px-4 py-3 text-sm font-semibold rounded-lg text-center"
+          >
             시작하기
-          </Link>
+          </button>
         </div>
       )}
     </header>

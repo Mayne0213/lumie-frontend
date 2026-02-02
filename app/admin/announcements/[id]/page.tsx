@@ -43,9 +43,9 @@ export default function AnnouncementDetailPage({ params }: PageProps) {
   useEffect(() => {
     if (announcement) {
       reset({
-        title: announcement.title,
-        content: announcement.content,
-        isPinned: announcement.isPinned,
+        announcementTitle: announcement.announcementTitle,
+        announcementContent: announcement.announcementContent,
+        isItImportantAnnouncement: announcement.isItImportantAnnouncement ?? false,
       });
     }
   }, [announcement, reset]);
@@ -66,7 +66,7 @@ export default function AnnouncementDetailPage({ params }: PageProps) {
     }
   };
 
-  const isPinned = watch('isPinned');
+  const isImportant = watch('isItImportantAnnouncement');
 
   if (isLoading) {
     return (
@@ -106,8 +106,8 @@ export default function AnnouncementDetailPage({ params }: PageProps) {
             <Input
               label="제목 *"
               type="text"
-              error={errors.title?.message}
-              {...register('title')}
+              error={errors.announcementTitle?.message}
+              {...register('announcementTitle')}
             />
 
             <div>
@@ -117,23 +117,23 @@ export default function AnnouncementDetailPage({ params }: PageProps) {
               <textarea
                 className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 rows={8}
-                {...register('content')}
+                {...register('announcementContent')}
               />
-              {errors.content && (
-                <p className="mt-1 text-sm text-red-600">{errors.content.message}</p>
+              {errors.announcementContent && (
+                <p className="mt-1 text-sm text-red-600">{errors.announcementContent.message}</p>
               )}
             </div>
 
             <div className="flex items-center gap-2">
               <input
                 type="checkbox"
-                id="isPinned"
-                checked={isPinned}
-                onChange={(e) => setValue('isPinned', e.target.checked)}
+                id="isItImportantAnnouncement"
+                checked={isImportant}
+                onChange={(e) => setValue('isItImportantAnnouncement', e.target.checked)}
                 className="rounded border-gray-300"
               />
-              <label htmlFor="isPinned" className="text-sm text-gray-700">
-                상단 고정
+              <label htmlFor="isItImportantAnnouncement" className="text-sm text-gray-700">
+                중요 공지 (상단 고정)
               </label>
             </div>
 

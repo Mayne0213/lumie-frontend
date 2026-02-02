@@ -18,8 +18,9 @@ RUN npm ci && chown -R nextjs:nodejs /app
 # Copy source code (will be synced by Tilt)
 COPY --chown=nextjs:nodejs . .
 
-# Create .next directory with correct permissions
-RUN mkdir -p /app/.next && chown -R nextjs:nodejs /app/.next
+# Create directories for Tilt live_update sync (ensures they exist for new files)
+RUN mkdir -p /app/.next /app/components /app/hooks /app/lib && \
+    chown -R nextjs:nodejs /app/.next /app/components /app/hooks /app/lib
 
 USER nextjs
 

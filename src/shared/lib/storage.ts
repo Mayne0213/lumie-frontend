@@ -2,6 +2,7 @@
 
 const ACCESS_TOKEN_KEY = 'lumie_access_token';
 const REFRESH_TOKEN_KEY = 'lumie_refresh_token';
+const SESSION_KEY = 'lumie-session';
 
 export const storage = {
   getAccessToken(): string | null {
@@ -33,5 +34,17 @@ export const storage = {
   setTokens(accessToken: string, refreshToken: string): void {
     this.setAccessToken(accessToken);
     this.setRefreshToken(refreshToken);
+  },
+
+  getTenantSlug(): string | null {
+    if (typeof window === 'undefined') return null;
+    try {
+      const session = localStorage.getItem(SESSION_KEY);
+      if (!session) return null;
+      const parsed = JSON.parse(session);
+      return parsed?.state?.user?.tenantSlug ?? null;
+    } catch {
+      return null;
+    }
   },
 };

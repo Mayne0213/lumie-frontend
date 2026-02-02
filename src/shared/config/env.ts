@@ -15,5 +15,4 @@ export const ENV = {
     process.env.NEXT_PUBLIC_FILE_SERVICE_URL || '/api/file',
   GRADING_SERVICE_URL:
     process.env.NEXT_PUBLIC_GRADING_SERVICE_URL || '/api/grading',
-  DEFAULT_TENANT_SLUG: process.env.NEXT_PUBLIC_DEFAULT_TENANT_SLUG || 'demo',
 } as const;

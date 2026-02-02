@@ -3,6 +3,7 @@
 import { ReactNode } from 'react';
 import { Header } from '@/widgets/header';
 import { AdminSidebar } from '@/widgets/admin-sidebar';
+import { SidebarProvider, SidebarInset, SidebarTrigger } from '@/components/ui/sidebar';
 
 interface AdminLayoutProps {
   children: ReactNode;
@@ -10,12 +11,17 @@ interface AdminLayoutProps {
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      <div className="flex">
-        <AdminSidebar />
+    <SidebarProvider>
+      <AdminSidebar />
+      <SidebarInset>
+        <header className="flex h-14 items-center gap-4 border-b bg-background px-4">
+          <SidebarTrigger className="-ml-1" />
+          <div className="flex-1">
+            <Header />
+          </div>
+        </header>
         <main className="flex-1 p-6">{children}</main>
-      </div>
-    </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }

@@ -12,6 +12,7 @@ export {
   useAcademy,
   useCreateAcademy,
   useUpdateAcademy,
+  useToggleAcademyActive,
   useDeleteAcademy,
 } from './api/queries';
 
